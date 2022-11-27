@@ -20,7 +20,7 @@ class CreateAboutUsTable extends Migration
             $table->text('who_we_are');
             $table->text('vision');
             $table->text('mission');
-            $table->text('buisiness_field');
+            $table->text('business_field');
             $table->text('owner_profile');
             $table->text('coorporate_values');
             $table->timestamps();
