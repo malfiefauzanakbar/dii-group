@@ -37,7 +37,7 @@ class AuthController extends Controller
         $email      = $request->email;
         $password   = $request->password;
         $cpassword   = $request->confirm_password;
-        $token      = Carbon::now();                  
+        $timenow      = Carbon::now();                  
         $role      = $request->input('role_id');
         if ($password != $cpassword) {            
             return response()->json([
@@ -49,7 +49,8 @@ class AuthController extends Controller
             'name'              => $name, 
             'email'             => $email, 
             'password'          => Crypt::encryptString($password),
-            'remember_token'    => Crypt::encryptString($token),            
+            'remember_token'    => Crypt::encryptString($timenow),
+            'expired_token'    => Crypt::encryptString($timenow),            
             'role_id'           => $role
         ]);
         if (!$user) {  
