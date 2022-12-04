@@ -78,7 +78,8 @@ class NewsController extends Controller
             $news = News::create([                                
                 'image'     => $imageName,
                 'title'      => $request->input('title'),
-                'description'      => $request->input('description'),                
+                'description'      => $request->input('description'),    
+                'status'      => $request->input('status'),            
             ]);
 
             if ($news) {
@@ -172,6 +173,7 @@ class NewsController extends Controller
                 'image'     => $uimage,
                 'title'      => $request->input('title'),
                 'description'      => $request->input('description'),
+                'status'      => $request->input('status'),
             ]);                    
 
             if ($news) {

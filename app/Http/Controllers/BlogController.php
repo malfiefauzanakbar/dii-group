@@ -79,6 +79,7 @@ class BlogController extends Controller
                 'image'     => $imageName,
                 'title'      => $request->input('title'),
                 'description'      => $request->input('description'),                
+                'status'      => $request->input('status'),
             ]);
 
             if ($blog) {
@@ -172,6 +173,7 @@ class BlogController extends Controller
                 'image'     => $uimage,
                 'title'      => $request->input('title'),
                 'description'      => $request->input('description'),
+                'status'      => $request->input('status'),
             ]);                    
 
             if ($blog) {
