@@ -51,3 +51,25 @@ Route::post('/blog', array('middleware' => 'cors', 'uses' => 'BlogController@sto
 Route::get('/blog/{id?}', array('middleware' => 'cors', 'uses' => 'BlogController@show'));
 Route::post('/blog/update/{id?}', array('middleware' => 'cors', 'uses' => 'BlogController@update'));
 Route::delete('/blog/{id?}', array('middleware' => 'cors', 'uses' => 'BlogController@destroy'));
+
+Route::get('/home', array('middleware' => 'cors', 'uses' => 'HomeController@index'));
+Route::post('/home', array('middleware' => 'cors', 'uses' => 'HomeController@store'));
+Route::get('/home/{id?}', array('middleware' => 'cors', 'uses' => 'HomeController@show'));
+Route::post('/home/update/{id?}', array('middleware' => 'cors', 'uses' => 'HomeController@update'));
+Route::delete('/home/{id?}', array('middleware' => 'cors', 'uses' => 'HomeController@destroy'));
+
+Route::get('/categoryproduct', array('middleware' => 'cors', 'uses' => 'CategoryProductController@index'));
+Route::post('/categoryproduct', array('middleware' => 'cors', 'uses' => 'CategoryProductController@store'));
+Route::get('/categoryproduct/{id?}', array('middleware' => 'cors', 'uses' => 'CategoryProductController@show'));
+Route::post('/categoryproduct/update/{id?}', array('middleware' => 'cors', 'uses' => 'CategoryProductController@update'));
+Route::delete('/categoryproduct/{id?}', array('middleware' => 'cors', 'uses' => 'CategoryProductController@destroy'));
+
+Route::get('/product', array('middleware' => 'cors', 'uses' => 'ProductController@index'));
+Route::post('/product', array('middleware' => 'cors', 'uses' => 'ProductController@store'));
+Route::get('/product/{id?}', array('middleware' => 'cors', 'uses' => 'ProductController@show'));
+Route::post('/product/update/{id?}', array('middleware' => 'cors', 'uses' => 'ProductController@update'));
+Route::delete('/product/{id?}', array('middleware' => 'cors', 'uses' => 'ProductController@destroy'));
+
+Route::get('/contactus', array('middleware' => 'cors', 'uses' => 'ContactUsController@index'));
+Route::post('/contactus', array('middleware' => 'cors', 'uses' => 'ContactUsController@store'));
+

@@ -138,7 +138,7 @@ class AuthController extends Controller
 
         if ($user){
             
-            $user->remember_token   = '';
+            $user->expired_token   = '';
             $user->save();
 
             return response([

@@ -42,82 +42,168 @@ class CompanyController extends Controller
             return response()->json(['success' => false,'message' => 'Token Expired!',], 400);
         }
 
-        //validate data
-        $validator = Validator::make($request->all(), [
-            'logo'     => 'required|image|mimes:jpeg,jpg,png|file|max:128000',
-            'name'      => 'required',
-            'field'      => 'required',
-            'description'      => 'required',
-            'address'      => 'required',
-            'map_link'      => 'required',            
-            'phone_number'      => 'required',
-            'mobile_number'      => 'required',
-            'email'      => 'required',
-            'instagram'    => 'required',
-            'facebook'      => 'required',
-            'twitter'      => 'required',
-        ],
-            [
-                'logo'     => 'Logo Is Required!',
-                'name'      => 'Name Is Required!',
-                'field'      => 'Field Is Required!',
-                'description'      => 'Description Is Required!',
-                'address'      => 'Address Is Required!',
-                'map_link'      => 'Map Link Is Required!',            
-                'phone_number'      => 'Phone Number Is Required!',
-                'mobile_number'      => 'Mobile Number Is Required!',
-                'email'      => 'Email Is Required!',
-                'instagram'    => 'Instagram Is Required!',
-                'facebook'      => 'Facebook Is Required!',
-                'twitter'      => 'Twitter Is Required!',
-            ]
-        );
+        $company = Company::limit(1)->first();
+        if ($company){
+             //validate data
+            $validator = Validator::make($request->all(), [
+                'name'      => 'required',
+                'field'      => 'required',
+                'description'      => 'required',
+                'address'      => 'required',
+                'map_link'      => 'required',            
+                'phone_number'      => 'required',
+                'mobile_number'      => 'required',
+                'email'      => 'required',
+                'instagram'    => 'required',
+                'facebook'      => 'required',
+                'twitter'      => 'required',
+            ],
+                [
+                    'name'      => 'Name Is Required!',
+                    'field'      => 'Field Is Required!',
+                    'description'      => 'Description Is Required!',
+                    'address'      => 'Address Is Required!',
+                    'map_link'      => 'Map Link Is Required!',            
+                    'phone_number'      => 'Phone Number Is Required!',
+                    'mobile_number'      => 'Mobile Number Is Required!',
+                    'email'      => 'Email Is Required!',
+                    'instagram'    => 'Instagram Is Required!',
+                    'facebook'      => 'Facebook Is Required!',
+                    'twitter'      => 'Twitter Is Required!',
+                ]
+            );
 
-        if($validator->fails()) {
+            if($validator->fails()) {
 
-            return response()->json([
-                'success' => false,
-                'message' => 'Please Fill The Required Fields!',
-                'data'    => $validator->errors()
-            ],400);
-
-        } else {
-
-            //upload logo
-            $timenow = Carbon::now();
-            $convtime = Carbon::createFromFormat('Y-m-d H:i:s', $timenow)->format('YmdHis');            
-            $extension = $request->logo->extension();          
-            $logoName = $convtime.".".$extension;
-            $request->logo->storeAs('public/company/', $logoName);
-            // $request->logo->move(public_path('company/'), $logoName);       
-
-            $company = Company::create([                                
-                'logo'     => $logoName,
-                'name'      => $request->input('name'),
-                'field'      => $request->input('field'),
-                'description'      => $request->input('description'),
-                'address'      => $request->input('address'),
-                'map_link'      => $request->input('map_link'),            
-                'phone_number'      => $request->input('phone_number'),
-                'mobile_number'      => $request->input('mobile_number'),
-                'email'      => $request->input('email'),
-                'instagram'    => $request->input('instagram'),
-                'facebook'      => $request->input('facebook'),
-                'twitter'      => $request->input('twitter'),
-            ]);
-
-            if ($company) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Success Create Data!',
-                ], 200);
-            } else {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Failed Create Data!',
-                ], 400);
-            }            
-        }
+                    'message' => 'Please Fill The Required Fields!',
+                    'data'    => $validator->errors()
+                ],400);
+
+            } else {
+
+                //upload image                 
+                $ulogo;
+
+                if($request->file('logo') != '') {
+                    $timenow = Carbon::now();
+                    $convtime = Carbon::createFromFormat('Y-m-d H:i:s', $timenow)->format('YmdHis');            
+                    $extension = $request->logo->extension();          
+                    $logoName = $convtime.".".$extension;                                
+                    $ulogo = $logoName;
+                    Storage::disk('local')->delete('public/company/'.$company->logo);                
+                    $request->logo->storeAs('public/company/', $logoName);
+                }else{                                
+                    $ulogo = $company->logo;           
+                }                                
+
+                $company = $company->update([                
+                    'logo'     => $ulogo,
+                    'name'      => $request->input('name'),
+                    'field'      => $request->input('field'),
+                    'description'      => $request->input('description'),
+                    'address'      => $request->input('address'),
+                    'map_link'      => $request->input('map_link'),            
+                    'phone_number'      => $request->input('phone_number'),
+                    'mobile_number'      => $request->input('mobile_number'),
+                    'email'      => $request->input('email'),
+                    'instagram'    => $request->input('instagram'),
+                    'facebook'      => $request->input('facebook'),
+                    'twitter'      => $request->input('twitter'),
+                ]);                    
+
+                if ($company) {
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Success Update Data!',
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Failed Update Data!',
+                    ], 500);
+                }
+
+            }
+        }else{
+            //validate data
+            $validator = Validator::make($request->all(), [
+                'logo'     => 'required|image|mimes:jpeg,jpg,png|file|max:128000',
+                'name'      => 'required',
+                'field'      => 'required',
+                'description'      => 'required',
+                'address'      => 'required',
+                'map_link'      => 'required',            
+                'phone_number'      => 'required',
+                'mobile_number'      => 'required',
+                'email'      => 'required',
+                'instagram'    => 'required',
+                'facebook'      => 'required',
+                'twitter'      => 'required',
+            ],
+                [
+                    'logo'     => 'Logo Is Required!',
+                    'name'      => 'Name Is Required!',
+                    'field'      => 'Field Is Required!',
+                    'description'      => 'Description Is Required!',
+                    'address'      => 'Address Is Required!',
+                    'map_link'      => 'Map Link Is Required!',            
+                    'phone_number'      => 'Phone Number Is Required!',
+                    'mobile_number'      => 'Mobile Number Is Required!',
+                    'email'      => 'Email Is Required!',
+                    'instagram'    => 'Instagram Is Required!',
+                    'facebook'      => 'Facebook Is Required!',
+                    'twitter'      => 'Twitter Is Required!',
+                ]
+            );
+
+            if($validator->fails()) {
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please Fill The Required Fields!',
+                    'data'    => $validator->errors()
+                ],400);
+
+            } else {
+
+                //upload logo
+                $timenow = Carbon::now();
+                $convtime = Carbon::createFromFormat('Y-m-d H:i:s', $timenow)->format('YmdHis');            
+                $extension = $request->logo->extension();          
+                $logoName = $convtime.".".$extension;
+                $request->logo->storeAs('public/company/', $logoName);
+                // $request->logo->move(public_path('company/'), $logoName);       
+
+                $company = Company::create([                                
+                    'logo'     => $logoName,
+                    'name'      => $request->input('name'),
+                    'field'      => $request->input('field'),
+                    'description'      => $request->input('description'),
+                    'address'      => $request->input('address'),
+                    'map_link'      => $request->input('map_link'),            
+                    'phone_number'      => $request->input('phone_number'),
+                    'mobile_number'      => $request->input('mobile_number'),
+                    'email'      => $request->input('email'),
+                    'instagram'    => $request->input('instagram'),
+                    'facebook'      => $request->input('facebook'),
+                    'twitter'      => $request->input('twitter'),
+                ]);
+
+                if ($company) {
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Success Create Data!',
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Failed Create Data!',
+                    ], 400);
+                }            
+            }
+        }        
     }
 
     public function show($id, Request $request)
@@ -277,6 +363,7 @@ class CompanyController extends Controller
               'logo'   => config('environment.app_url')
               .config('environment.dir_company').$company->logo,
               'name'    => $company->name,                            
+              'field'    => $company->field,
               'description'    => $company->description,
               'address'    => $company->address,
               'map_link'    => $company->map_link,

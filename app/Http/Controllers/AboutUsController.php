@@ -73,31 +73,58 @@ class AboutUsController extends Controller
                 'data'    => $validator->errors()
             ],400);
 
-        } else {              
+        } else {
+            $aboutus = AboutUs::limit(1)->first();
+            if ($aboutus){                                                                 
+                
+                    $aboutus = $aboutus->update([                
+                        'title'      => $request->input('title'),
+                        'description'      => $request->input('description'),
+                        'who_we_are'      => $request->input('who_we_are'),
+                        'vision'      => $request->input('vision'),
+                        'mission'      => $request->input('mission'),
+                        'business_field'      => $request->input('business_field'),
+                        'owner_profile'      => $request->input('owner_profile'),
+                        'coorporate_values'    => $request->input('coorporate_values'),
+                    ]);                    
 
-            $aboutus = AboutUs::create([
-                'title'      => $request->input('title'),
-                'description'      => $request->input('description'),
-                'who_we_are'      => $request->input('who_we_are'),
-                'vision'      => $request->input('vision'),
-                'mission'      => $request->input('mission'),
-                'business_field'      => $request->input('business_field'),
-                'owner_profile'      => $request->input('owner_profile'),
-                'coorporate_values'    => $request->input('coorporate_values'),
-            ]);
+                    if ($aboutus) {
+                        return response()->json([
+                            'success' => true,
+                            'message' => 'Success Update Data!',
+                        ], 200);
+                    } else {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Failed Update Data!',
+                        ], 500);
+                    }            
+            }else{             
+                
+                $aboutus = AboutUs::create([
+                    'title'      => $request->input('title'),
+                    'description'      => $request->input('description'),
+                    'who_we_are'      => $request->input('who_we_are'),
+                    'vision'      => $request->input('vision'),
+                    'mission'      => $request->input('mission'),
+                    'business_field'      => $request->input('business_field'),
+                    'owner_profile'      => $request->input('owner_profile'),
+                    'coorporate_values'    => $request->input('coorporate_values'),
+                ]);
 
-            if ($aboutus) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Success Create Data!',
-                ], 200);
-            } else {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Failed Create Data!',
-                ], 400);
-            }            
-        }
+                if ($aboutus) {
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Success Create Data!',
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Failed Create Data!',
+                    ], 400);
+                }                        
+            }
+        }                
     }
 
     public function show($id, Request $request)
