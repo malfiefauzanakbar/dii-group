@@ -46,9 +46,9 @@ class CompanyController extends Controller
         if ($company){
              //validate data
             $validator = Validator::make($request->all(), [
-                'name'      => 'required',
-                'field'      => 'required',
-                'description'      => 'required',
+                // 'name'      => 'required',
+                // 'field'      => 'required',
+                // 'description'      => 'required',
                 'address'      => 'required',
                 'map_link'      => 'required',            
                 'phone_number'      => 'required',
@@ -59,9 +59,9 @@ class CompanyController extends Controller
                 'twitter'      => 'required',
             ],
                 [
-                    'name'      => 'Name Is Required!',
-                    'field'      => 'Field Is Required!',
-                    'description'      => 'Description Is Required!',
+                    // 'name'      => 'Name Is Required!',
+                    // 'field'      => 'Field Is Required!',
+                    // 'description'      => 'Description Is Required!',
                     'address'      => 'Address Is Required!',
                     'map_link'      => 'Map Link Is Required!',            
                     'phone_number'      => 'Phone Number Is Required!',
@@ -84,25 +84,25 @@ class CompanyController extends Controller
             } else {
 
                 //upload image                 
-                $ulogo;
+                // $ulogo;
 
-                if($request->file('logo') != '') {
-                    $timenow = Carbon::now();
-                    $convtime = Carbon::createFromFormat('Y-m-d H:i:s', $timenow)->format('YmdHis');            
-                    $extension = $request->logo->extension();          
-                    $logoName = $convtime.".".$extension;                                
-                    $ulogo = $logoName;
-                    Storage::disk('local')->delete('public/company/'.$company->logo);                
-                    $request->logo->storeAs('public/company/', $logoName);
-                }else{                                
-                    $ulogo = $company->logo;           
-                }                                
+                // if($request->file('logo') != '') {
+                //     $timenow = Carbon::now();
+                //     $convtime = Carbon::createFromFormat('Y-m-d H:i:s', $timenow)->format('YmdHis');            
+                //     $extension = $request->logo->extension();          
+                //     $logoName = $convtime.".".$extension;                                
+                //     $ulogo = $logoName;
+                //     Storage::disk('local')->delete('public/company/'.$company->logo);                
+                //     $request->logo->storeAs('public/company/', $logoName);
+                // }else{                                
+                //     $ulogo = $company->logo;           
+                // }                                
 
                 $company = $company->update([                
-                    'logo'     => $ulogo,
-                    'name'      => $request->input('name'),
-                    'field'      => $request->input('field'),
-                    'description'      => $request->input('description'),
+                    'logo'     => '-',
+                    'name'      => '-',
+                    'field'      => '-',
+                    'description'      => '-',
                     'address'      => $request->input('address'),
                     'map_link'      => $request->input('map_link'),            
                     'phone_number'      => $request->input('phone_number'),
@@ -129,10 +129,10 @@ class CompanyController extends Controller
         }else{
             //validate data
             $validator = Validator::make($request->all(), [
-                'logo'     => 'required|image|mimes:jpeg,jpg,png|file|max:128000',
-                'name'      => 'required',
-                'field'      => 'required',
-                'description'      => 'required',
+                // 'logo'     => 'required|image|mimes:jpeg,jpg,png|file|max:128000',
+                // 'name'      => 'required',
+                // 'field'      => 'required',
+                // 'description'      => 'required',
                 'address'      => 'required',
                 'map_link'      => 'required',            
                 'phone_number'      => 'required',
@@ -143,10 +143,10 @@ class CompanyController extends Controller
                 'twitter'      => 'required',
             ],
                 [
-                    'logo'     => 'Logo Is Required!',
-                    'name'      => 'Name Is Required!',
-                    'field'      => 'Field Is Required!',
-                    'description'      => 'Description Is Required!',
+                    // 'logo'     => 'Logo Is Required!',
+                    // 'name'      => 'Name Is Required!',
+                    // 'field'      => 'Field Is Required!',
+                    // 'description'      => 'Description Is Required!',
                     'address'      => 'Address Is Required!',
                     'map_link'      => 'Map Link Is Required!',            
                     'phone_number'      => 'Phone Number Is Required!',
@@ -169,18 +169,18 @@ class CompanyController extends Controller
             } else {
 
                 //upload logo
-                $timenow = Carbon::now();
-                $convtime = Carbon::createFromFormat('Y-m-d H:i:s', $timenow)->format('YmdHis');            
-                $extension = $request->logo->extension();          
-                $logoName = $convtime.".".$extension;
-                $request->logo->storeAs('public/company/', $logoName);
+                // $timenow = Carbon::now();
+                // $convtime = Carbon::createFromFormat('Y-m-d H:i:s', $timenow)->format('YmdHis');            
+                // $extension = $request->logo->extension();          
+                // $logoName = $convtime.".".$extension;
+                // $request->logo->storeAs('public/company/', $logoName);
                 // $request->logo->move(public_path('company/'), $logoName);       
 
                 $company = Company::create([                                
-                    'logo'     => $logoName,
-                    'name'      => $request->input('name'),
-                    'field'      => $request->input('field'),
-                    'description'      => $request->input('description'),
+                    'logo'     => '-',
+                    'name'      => '-',
+                    'field'      => '-',
+                    'description'      => '-',
                     'address'      => $request->input('address'),
                     'map_link'      => $request->input('map_link'),            
                     'phone_number'      => $request->input('phone_number'),
