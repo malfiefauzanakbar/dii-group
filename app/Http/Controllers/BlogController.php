@@ -46,12 +46,14 @@ class BlogController extends Controller
         $validator = Validator::make($request->all(), [
             'image'     => 'required|image|mimes:jpeg,jpg,png|file|max:128000',
             'title'      => 'required',
-            'description'      => 'required',            
+            'description'      => 'required',
+            'status'      => 'required',            
         ],
             [
                 'image'     => 'Image Is Required!',
                 'title'      => 'Title Is Required!',                
-                'description'      => 'Description Is Required!',                
+                'description'      => 'Description Is Required!',
+                'status'      => 'Status Is Required!',                
             ]
         );
 
@@ -130,10 +132,12 @@ class BlogController extends Controller
         $validator = Validator::make($request->all(), [
             'title'      => 'required',
             'description'      => 'required',
+            'status'      => 'required',            
         ],
             [
-                'title'      => 'Title Is Required!',
-                'description'      => 'Description Is Required!',                
+                'title'      => 'Title Is Required!',                
+                'description'      => 'Description Is Required!',
+                'status'      => 'Status Is Required!',                
             ]
         );
 
@@ -224,6 +228,9 @@ class BlogController extends Controller
               .config('environment.dir_blog').$blog->image,
               'title'    => $blog->title,                            
               'description'    => $blog->description,
+              'status'    => $article->status,
+              'created_at'    => $article->created_at,
+              'updated_at'    => $article->updated_at,
             );                        
 
             if ($type == 'array'){
