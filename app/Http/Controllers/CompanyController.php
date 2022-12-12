@@ -207,12 +207,7 @@ class CompanyController extends Controller
     }
 
     public function show($id, Request $request)
-    {
-        $token = $request->header('token');        
-        $checkToken = AppHelper::checkToken($token);
-        if ($checkToken == 'true'){
-            return response()->json(['success' => false,'message' => 'Token Expired!',], 400);
-        }
+    {        
 
         $company = Company::whereId($id)->get();
         $serCompany = $this->serializeCompany($company, 'object');

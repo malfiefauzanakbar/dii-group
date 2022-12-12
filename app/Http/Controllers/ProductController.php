@@ -137,12 +137,7 @@ class ProductController extends Controller
 
 
     public function show($id, Request $request)
-    {
-        $token = $request->header('token');        
-        $checkToken = AppHelper::checkToken($token);
-        if ($checkToken == 'true'){
-            return response()->json(['success' => false,'message' => 'Token Expired!',], 400);
-        }
+    {        
         
         $product = DB::table('products')
         ->join('category_products', 'products.category_id', '=', 'category_products.id')

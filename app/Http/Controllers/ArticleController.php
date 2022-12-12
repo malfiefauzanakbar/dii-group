@@ -117,12 +117,7 @@ class ArticleController extends Controller
     }
 
     public function show($id, Request $request)
-    {
-        $token = $request->header('token');        
-        $checkToken = AppHelper::checkToken($token);
-        if ($checkToken == 'true'){
-            return response()->json(['success' => false,'message' => 'Token Expired!',], 400);
-        }
+    {        
 
         $article = Article::whereId($id)->get();
         $serCompany = $this->serializeArticle($article, 'object');

@@ -107,12 +107,7 @@ class HomeController extends Controller
     }
 
     public function show($id, Request $request)
-    {
-        $token = $request->header('token');        
-        $checkToken = AppHelper::checkToken($token);
-        if ($checkToken == 'true'){
-            return response()->json(['success' => false,'message' => 'Token Expired!',], 400);
-        }
+    {        
 
         $home = Home::whereId($id)->get();
         $serHome = $this->serializeHome($home, 'object');

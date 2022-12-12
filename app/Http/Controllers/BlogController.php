@@ -97,12 +97,7 @@ class BlogController extends Controller
     }
 
     public function show($id, Request $request)
-    {
-        $token = $request->header('token');        
-        $checkToken = AppHelper::checkToken($token);
-        if ($checkToken == 'true'){
-            return response()->json(['success' => false,'message' => 'Token Expired!',], 400);
-        }
+    {        
 
         $blog = Blog::whereId($id)->get();
         $serCompany = $this->serializeBlog($blog, 'object');
