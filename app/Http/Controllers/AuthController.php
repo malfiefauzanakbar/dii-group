@@ -14,23 +14,32 @@ use Illuminate\Support\Facades\Crypt;
 class AuthController extends Controller
 {
     public function register(Request $request)
-    {
-        $rules = [
+    {        
+        //validate data
+        $validator = Validator::make($request->all(), [
             'name' => 'unique:users|required',
             'email'    => 'unique:users|required',
             'password' => 'required',
             'confirm_password' => 'required',
             'role_id' => 'required'
-        ];
+        ],
+            [                
+                'name' => 'Name Is Required!',
+                'email'    => 'Email Is Required!',
+                'password' => 'Password Is Required!',
+                'confirm_password' => 'Confirm Password Is Required!',
+                'role_id' => 'Role Is Required!'         
+            ]
+        );
 
-        $input     = $request->only('name', 'email','password', 'confirm_password', 'role_id');
-        $validator = Validator::make($input, $rules);
+        if($validator->fails()) {
 
-        if ($validator->fails()) {            
             return response()->json([
                 'success' => false,
-                'message' => $validator->messages()->all(),
-            ], 400);
+                'message' => 'Please Fill The Required Fields!',
+                'data'    => $validator->errors()
+            ],400);
+
         }
 
         $name       = $request->name;
@@ -77,19 +86,25 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $rules = [            
+        //validate data
+        $validator = Validator::make($request->all(), [            
             'email'    => 'required',
             'password' => 'required',
-        ];
+        ],
+            [                
+                'email'    => 'Email Is Required!',
+                'password' => 'Password Is Required!',      
+            ]
+        );
 
-        $input     = $request->only('email','password');
-        $validator = Validator::make($input, $rules);
+        if($validator->fails()) {
 
-        if ($validator->fails()) {            
             return response()->json([
                 'success' => false,
-                'message' => $validator->messages(),
-            ], 400);
+                'message' => 'Please Fill The Required Fields!',
+                'data'    => $validator->errors()
+            ],400);
+
         }
         
         $email      = $request->email;
