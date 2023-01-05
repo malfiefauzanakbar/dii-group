@@ -57,6 +57,7 @@ class CompanyController extends Controller
                 'instagram'    => 'required',
                 'facebook'      => 'required',
                 'twitter'      => 'required',
+                'map_embed'      => 'required',
             ],
                 [
                     // 'name'      => 'Name Is Required!',
@@ -70,6 +71,7 @@ class CompanyController extends Controller
                     'instagram'    => 'Instagram Is Required!',
                     'facebook'      => 'Facebook Is Required!',
                     'twitter'      => 'Twitter Is Required!',
+                    'map_embed'      => 'Map Embed Is Required!',
                 ]
             );
 
@@ -111,6 +113,7 @@ class CompanyController extends Controller
                     'instagram'    => $request->input('instagram'),
                     'facebook'      => $request->input('facebook'),
                     'twitter'      => $request->input('twitter'),
+                    'map_embed'      => $request->input('map_embed'),
                 ]);                    
 
                 if ($company) {
@@ -141,6 +144,7 @@ class CompanyController extends Controller
                 'instagram'    => 'required',
                 'facebook'      => 'required',
                 'twitter'      => 'required',
+                'map_embed'      => 'required',
             ],
                 [
                     // 'logo'     => 'Logo Is Required!',
@@ -155,6 +159,7 @@ class CompanyController extends Controller
                     'instagram'    => 'Instagram Is Required!',
                     'facebook'      => 'Facebook Is Required!',
                     'twitter'      => 'Twitter Is Required!',
+                    'map_embed'      => 'Map Embed Is Required!',
                 ]
             );
 
@@ -189,6 +194,7 @@ class CompanyController extends Controller
                     'instagram'    => $request->input('instagram'),
                     'facebook'      => $request->input('facebook'),
                     'twitter'      => $request->input('twitter'),
+                    'map_embed'      => $request->input('map_embed'),
                 ]);
 
                 if ($company) {
@@ -247,6 +253,7 @@ class CompanyController extends Controller
             'instagram'    => 'required',
             'facebook'      => 'required',
             'twitter'      => 'required',
+            'map_embed'      => 'required',
         ],
             [
                 'name'      => 'Name Is Required!',
@@ -260,6 +267,7 @@ class CompanyController extends Controller
                 'instagram'    => 'Instagram Is Required!',
                 'facebook'      => 'Facebook Is Required!',
                 'twitter'      => 'Twitter Is Required!',
+                'map_embed'      => 'Map Link Is Required!',
             ]
         );
 
@@ -303,6 +311,7 @@ class CompanyController extends Controller
                 'instagram'    => $request->input('instagram'),
                 'facebook'      => $request->input('facebook'),
                 'twitter'      => $request->input('twitter'),
+                'map_embed'      => $request->input('map_embed'),
             ]);                    
 
             if ($company) {
@@ -368,6 +377,7 @@ class CompanyController extends Controller
               'instagram'    => $company->instagram,
               'facebook'    => $company->facebook,
               'twitter'    => $company->twitter,
+              'map_embed'    => $company->map_embed,
             );                        
 
             if ($type == 'array'){

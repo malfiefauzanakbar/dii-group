@@ -42,34 +42,51 @@ class HomeController extends Controller
             return response()->json(['success' => false,'message' => 'Token Expired!',], 400);
         }
 
-        //validate data
-        $validator = Validator::make($request->all(), [            
-            'title'      => 'required',
-            'description'      => 'required',
-            'company_overview'      => 'required',            
-        ],
-            [                
-                'title'      => 'Title Is Required!',                
-                'description'      => 'Description Is Required!',                
-                'company_overview'      => 'Company Overview Is Required!',
-            ]
-        );
+        
+        $home = Home::limit(1)->first();
+        if ($home){
+            //validate data
+            $validator = Validator::make($request->all(), [            
+                'title'      => 'required',
+                'description'      => 'required',
+                'company_overview'      => 'required',         
+            ],
+                [                
+                    'title'      => 'Title Is Required!',                
+                    'description'      => 'Description Is Required!',                
+                    'company_overview'      => 'Company Overview Is Required!',
+                ]
+            );
 
-        if($validator->fails()) {
+            if($validator->fails()) {
 
-            return response()->json([
-                'success' => false,
-                'message' => 'Please Fill The Required Fields!',
-                'data'    => $validator->errors()
-            ],400);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please Fill The Required Fields!',
+                    'data'    => $validator->errors()
+                ],400);
 
-        } else {
-            $home = Home::limit(1)->first();
-            if ($home){
+            }else{
+
+                //upload image                 
+                $uimage;
+
+                if($request->file('image') != '') {
+                    $timenow = Carbon::now();
+                    $convtime = Carbon::createFromFormat('Y-m-d H:i:s', $timenow)->format('YmdHis');            
+                    $extension = $request->image->extension();          
+                    $imageName = $convtime.".".$extension;                                
+                    $uimage = $imageName;
+                    Storage::disk('local')->delete('public/home/'.$home->image);                
+                    $request->image->storeAs('public/home/', $imageName);
+                }else{                                
+                    $uimage = $home->image;           
+                }
                 $home = $home->update([                                
                     'title'      => $request->input('title'),
                     'description'      => $request->input('description'),
                     'company_overview'      => $request->input('company_overview'),
+                    'image'     => $uimage,
                 ]);                    
     
                 if ($home) {
@@ -83,11 +100,44 @@ class HomeController extends Controller
                         'message' => 'Failed Update Data!',
                     ], 500);
                 }
+            }                
+        }else{
+            //validate data
+            $validator = Validator::make($request->all(), [            
+                'title'      => 'required',
+                'description'      => 'required',
+                'company_overview'      => 'required',      
+                'image'     => 'required|image|mimes:jpeg,jpg,png|file|max:128000',      
+            ],
+                [                
+                    'title'      => 'Title Is Required!',                
+                    'description'      => 'Description Is Required!',                
+                    'company_overview'      => 'Company Overview Is Required!',
+                    'image'     => 'Image Is Required!',
+                ]
+            );
+
+            if($validator->fails()) {
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please Fill The Required Fields!',
+                    'data'    => $validator->errors()
+                ],400);
+
             }else{
+                //upload image
+                $timenow = Carbon::now();
+                $convtime = Carbon::createFromFormat('Y-m-d H:i:s', $timenow)->format('YmdHis');            
+                $extension = $request->image->extension();          
+                $imageName = $convtime.".".$extension;
+                $request->image->storeAs('public/home/', $imageName);
+
                 $home = Home::create([                                                
                     'title'      => $request->input('title'),
                     'description'      => $request->input('description'),
                     'company_overview'      => $request->input('company_overview'),                
+                    'image'     => $imageName,
                 ]);
         
                 if ($home) {
@@ -101,8 +151,9 @@ class HomeController extends Controller
                         'message' => 'Failed Create Data!',
                     ], 400);
                 }
-            }
-        }                                            
+            }                
+        }
+                                                  
         
     }
 
@@ -217,6 +268,8 @@ class HomeController extends Controller
               'title'    => $home->title,                            
               'description'    => $home->description,
               'company_overview'    => $home->company_overview,
+              'image'   => config('environment.app_url')
+              .config('environment.dir_home').$home->image,
             );                        
 
             if ($type == 'array'){

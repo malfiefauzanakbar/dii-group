@@ -6,5 +6,6 @@ return [
   'dir_article' => env('DIR_ARTICLE'),  
   'dir_blog' => env('DIR_BLOG'),
   'dir_product' => env('DIR_PRODUCT'),
+  'dir_home' => env('DIR_HOME'),
   'mail_username' => env('MAIL_USERNAME'),  
 ];
