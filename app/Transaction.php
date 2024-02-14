@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Home extends Model
+class Transaction extends Model
 {
     protected $fillable = [
-        'title', 'description', 'company_overview', 'image',
+        'user_id', 'sub_total', 'tax', 'service', 'total', 'status'
     ];
 }

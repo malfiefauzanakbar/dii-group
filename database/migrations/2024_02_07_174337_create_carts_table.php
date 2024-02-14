@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddImageToHomesTable extends Migration
+class CreateCartsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,13 @@ class AddImageToHomesTable extends Migration
      */
     public function up()
     {
-        Schema::table('homes', function (Blueprint $table) {
-            $table->string('image');
+        Schema::create('carts', function (Blueprint $table) {
+            $table->id();
+            $table->integer('product_id');
+            $table->integer('user_id');
+            $table->integer('qty');
+            $table->integer('status');            
+            $table->timestamps();
         });
     }
 
@@ -25,8 +30,6 @@ class AddImageToHomesTable extends Migration
      */
     public function down()
     {
-        Schema::table('homes', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('carts');
     }
 }

@@ -22,13 +22,13 @@ class ProductController extends Controller
         if ($request->input('category') != ''){
             $category = 'category_id = '.$request->input('category');
         }else {
-            $category = 'category_id != ""';
+            $category = 'category_id is not null';
         }            
         
         $products = DB::table('products')
         ->join('category_products', 'products.category_id', '=', 'category_products.id')
         ->select('products.*', 'category_products.name as category')
-        ->whereRaw($category);
+        ->whereRaw($category);        
         
         $type = "array";
         if ($request->input('slider') != ''){
@@ -36,7 +36,15 @@ class ProductController extends Controller
             $type = "object";
         }
 
-        $products = $products->get();
+        $products = $products->get();                
+
+        if (!$products) {
+            return response([
+                'success'   => true,
+                'message'   => 'Data Not Found!',
+                'data'      => []
+            ], 200);
+        }
 
         $serProducts = $this->serializeProduct($products, $type);
         if ($serProducts) {
@@ -64,14 +72,20 @@ class ProductController extends Controller
 
         //validate data
         $validator = Validator::make($request->all(), [            
-            'name'     => 'required',            
+            'name'     => 'required',
+            'stock'     => 'required',
+            'price'     => 'required',
+            'expired_date'     => 'required',            
             'category_id'     => 'required',
             'images'     => 'required',
             'images.*' => 'image|mimes:jpeg,jpg,png|file|max:128000',            
             'description'     => 'required',
         ],
             [
-                'name.required'    => 'Name Is Required!',                
+                'name.required'    => 'Name Is Required!',           
+                'stock.required'     => 'Stock Is Required!',
+                'price.required'     => 'Price Is Required!',
+                'expired_date.required'     => 'Expired Date Is Required!',     
                 'category_id.required'    => 'Category Is Required!',
                 'images.required'    => 'Image Is Required!',
                 'images.max'    => 'Maximum Image Size Is 128MB!',
@@ -89,11 +103,22 @@ class ProductController extends Controller
 
         } else {                            
 
+            $checkName = Product::where(DB::raw("LOWER(name)"), strtolower($request->input('name')))->first();
+
+            if ($checkName) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Name Already Exist!',
+                ], 400);
+            }
+
             //insert product
             $product = Product::create([
                 'name'     => $request->input('name'),
+                'stock'     => $request->input('stock'),
+                'price'     => $request->input('price'),
+                'expired_date'     => $request->input('expired_date'),
                 'category_id'     => $request->input('category_id'),
-                'brand_id'        => 1,
                 'description'     => $request->input('description')              
             ]);                            
 
@@ -170,12 +195,18 @@ class ProductController extends Controller
 
         //validate data
         $validator = Validator::make($request->all(), [            
-            'name'     => 'required',            
+            'name'     => 'required',       
+            'stock'     => 'required',
+            'price'     => 'required',
+            'expired_date'     => 'required',       
             'category_id'     => 'required',
             'description'     => 'required',
         ],
             [
                 'name.required'    => 'Name Is Required!',                
+                'stock.required'     => 'Stock Is Required!',
+                'price.required'     => 'Price Is Required!',
+                'expired_date.required'     => 'Expired Date Is Required!',     
                 'category_id.required'    => 'Category Is Required!',
                 'description.required'    => 'Description Is Required!',
             ]
@@ -189,10 +220,22 @@ class ProductController extends Controller
                 'data'    => $validator->errors()
             ],400);
 
-        } else {                                                   
+        } else {        
+            
+            $checkName = Product::where(DB::raw("LOWER(name)"), strtolower($request->input('name')))->first();
+
+            if ($checkName) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Name Already Exist!',
+                ], 400);
+            }
 
             $uproduct = Product::whereId($id)->update([
                 'name'     => $request->input('name'),
+                'stock'     => $request->input('stock'),
+                'price'     => $request->input('price'),
+                'expired_date'     => $request->input('expired_date'),
                 'category_id'     => $request->input('category_id'),
                 'description'     => $request->input('description')
             ]);                    
@@ -295,6 +338,9 @@ class ProductController extends Controller
             $item =  array (
               'id'      => $product->id,
               'name'      => $product->name,
+              'stock'      => $product->stock,
+              'price'      => $product->price,
+              'expired_date'      => $product->expired_date,
               'category_id'      => $product->category_id,
               'category'   => $product->category,
               'images' => $data_image,

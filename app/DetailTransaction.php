@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Comment extends Model
+class DetailTransaction extends Model
 {
     protected $fillable = [
-        'name', 'email', 'message', 
+        'transaction_id', 'product_id', 'price', 'qty',
     ];
 }

@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Blog extends Model
+class Cart extends Model
 {
     protected $fillable = [
-        'title', 'image', 'description', 'status',
+        'product_id', 'user_id', 'qty', 'status',
     ];
 }

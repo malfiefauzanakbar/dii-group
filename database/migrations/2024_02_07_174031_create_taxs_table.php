@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddStatusToNewsTable extends Migration
+class CreateTaxsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddStatusToNewsTable extends Migration
      */
     public function up()
     {
-        Schema::table('news', function (Blueprint $table) {
-            $table->string('status');
+        Schema::create('taxes', function (Blueprint $table) {
+            $table->id();
+            $table->integer('tax');
+            $table->integer('service');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddStatusToNewsTable extends Migration
      */
     public function down()
     {
-        Schema::table('news', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('taxes');
     }
 }

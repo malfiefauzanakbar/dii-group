@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHomeSlidersTable extends Migration
+class CreateTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,14 @@ class CreateHomeSlidersTable extends Migration
      */
     public function up()
     {
-        Schema::create('home_sliders', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('image');
-            $table->text('description');
+            $table->integer('user_id');
+            $table->integer('sub_total');
+            $table->integer('tax');
+            $table->integer('service');
+            $table->integer('total');
+            $table->integer('status');
             $table->timestamps();
         });
     }
@@ -29,6 +32,6 @@ class CreateHomeSlidersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('home_sliders');
+        Schema::dropIfExists('transactions');
     }
 }

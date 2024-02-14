@@ -9,8 +9,8 @@ class AppHelper
 {
     public static function checkToken($token)
     {        
-        $user = User::where('remember_token', $token)->first();
-        if (!$user){
+        $user = User::where('remember_token', $token)->first();                
+        if (!$user){            
             return 'true';
         }        
         $timenow = Carbon::now();        

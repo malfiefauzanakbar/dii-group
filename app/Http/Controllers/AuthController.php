@@ -21,6 +21,8 @@ class AuthController extends Controller
             'email'    => 'unique:users|required',
             'password' => 'required',
             'confirm_password' => 'required',
+            'date_of_birth' => 'required',
+            'phone' => 'required',
             'role_id' => 'required'
         ],
             [                
@@ -28,6 +30,8 @@ class AuthController extends Controller
                 'email'    => 'Email Is Required!',
                 'password' => 'Password Is Required!',
                 'confirm_password' => 'Confirm Password Is Required!',
+                'date_of_birth' => 'Date Of Birth Is Required!',
+                'phone' => 'Phone!',
                 'role_id' => 'Role Is Required!'         
             ]
         );
@@ -46,6 +50,8 @@ class AuthController extends Controller
         $email      = $request->email;
         $password   = $request->password;
         $cpassword   = $request->confirm_password;
+        $dateOfBirth   = $request->date_of_birth;
+        $phone   = $request->phone;
         $timenow      = Carbon::now();               
         $expiredToken = date('Y-m-d H:i:s', strtotime('+30 minutes', strtotime($timenow)));   
         $role      = $request->input('role_id');
@@ -59,8 +65,10 @@ class AuthController extends Controller
             'name'              => $name, 
             'email'             => $email, 
             'password'          => Crypt::encryptString($password),
+            'date_of_birth'     => $email, 
+            'phone'             => $phone, 
             'remember_token'    => Crypt::encryptString($timenow),
-            'expired_token'    => Crypt::encryptString($expiredToken),            
+            'expired_token'     => Crypt::encryptString($expiredToken),            
             'role_id'           => $role
         ]);
         if (!$user) {  
@@ -154,6 +162,7 @@ class AuthController extends Controller
         if ($user){
             
             $user->expired_token   = '';
+            $user->remember_token   = '';
             $user->save();
 
             return response([
